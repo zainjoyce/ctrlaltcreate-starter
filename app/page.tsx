@@ -1,4 +1,4 @@
-import { RocketIcon, ComponentIcon, PaletteIcon, ZapIcon, ClockIcon, BlocksIcon, OptimizeIcon, ShieldCheckIcon } from 'lucide-react'
+import { RocketIcon, ComponentIcon, PaletteIcon, ZapIcon, ClockIcon, BlocksIcon, ShieldCheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import {
