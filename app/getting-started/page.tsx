@@ -1,4 +1,4 @@
-import { CheckIcon, RocketIcon, CodeIcon, PlayIcon } from 'lucide-react'
+import { CheckIcon, RocketIcon, CodeIcon, PlayIcon, ServerIcon } from 'lucide-react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -23,11 +23,11 @@ export default function GettingStartedPage() {
       time: '10 seconds'
     },
     {
-      icon: CheckIcon,
-      title: 'Explore Components',
-      description: 'Check out the pre-built components and examples',
-      code: 'Visit /components and /forms pages',
-      time: '5 minutes'
+      icon: ServerIcon,
+      title: 'Test API Routes',
+      description: 'Try the pre-built API endpoints',
+      code: 'curl http://localhost:3000/api/health',
+      time: '30 seconds'
     },
     {
       icon: RocketIcon,
@@ -42,16 +42,30 @@ export default function GettingStartedPage() {
     'Next.js 15 with App Router',
     'TypeScript with strict mode',
     'Tailwind CSS 4 with design tokens',
-    '17+ shadcn/ui components',
+    '19+ shadcn/ui components',
     'React Hook Form + Zod validation',
+    'Supabase integration with CRUD API',
+    'Resend email with templates',
     'ESLint + Prettier configured',
     'Dark/light mode support',
     'Responsive sidebar layout',
-    'VS Code settings included',
+    'Pre-built API routes',
     'One-click Vercel deployment'
   ]
 
   const nextSteps = [
+    {
+      title: 'Configure Supabase (Optional)',
+      description: 'Set up your Supabase project for database and auth',
+      code: 'Copy .env.example to .env.local and add your Supabase keys',
+      link: '/docs'
+    },
+    {
+      title: 'Set Up Email Sending (Optional)',
+      description: 'Configure Resend for transactional emails',
+      code: 'Add RESEND_API_KEY to .env.local',
+      link: '/docs'
+    },
     {
       title: 'Customize Your Theme',
       description: 'Edit colors and design tokens in app/globals.css',
@@ -61,16 +75,6 @@ export default function GettingStartedPage() {
       title: 'Add More Components',
       description: 'Use shadcn/ui CLI to add additional components',
       code: 'npx shadcn@latest add [component-name]'
-    },
-    {
-      title: 'Set Up Your Database',
-      description: 'Add your preferred database (PostgreSQL, MongoDB, etc.)',
-      link: '/docs'
-    },
-    {
-      title: 'Configure Authentication',
-      description: 'Set up NextAuth.js or your preferred auth solution',
-      link: '/docs'
     }
   ]
 
@@ -155,18 +159,24 @@ export default function GettingStartedPage() {
                 <pre className='bg-muted p-4 rounded-lg text-sm overflow-x-auto'>
 {`ctrlaltcreate-starter/
 ├── app/                    # Next.js App Router pages
-│   ├── components/         # Component showcase
-│   ├── forms/             # Form examples
-│   ├── styling/           # Design system
-│   ├── layout.tsx         # Root layout
-│   └── page.tsx           # Homepage
+│   ├── api/               # API routes (NEW!)
+│   │   ├── data/         # Supabase CRUD operations
+│   │   ├── email/        # Email sending with Resend
+│   │   └── health/       # Health check endpoint
+│   ├── components/        # Component showcase
+│   ├── docs/             # Documentation
+│   ├── forms/            # Form examples
+│   ├── styling/          # Design system
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Homepage
 ├── components/
-│   ├── ui/                # shadcn/ui components
-│   └── layout/            # Layout components
+│   ├── ui/               # shadcn/ui components (19+)
+│   └── layout/           # Layout components
 ├── lib/
-│   └── utils.ts           # Utility functions
-├── hooks/                 # Custom React hooks
-└── public/                # Static assets`}
+│   ├── supabase.ts       # Supabase utilities (NEW!)
+│   └── utils.ts          # Helper functions
+├── hooks/                # Custom React hooks
+└── public/               # Static assets`}
                 </pre>
               </CardContent>
             </Card>
@@ -201,14 +211,26 @@ export default function GettingStartedPage() {
               </CardContent>
             </Card>
 
+            {/* API Routes Highlight */}
+            <Alert className='bg-blue-500/10 border-blue-500/20'>
+              <ServerIcon className='h-4 w-4 text-blue-500' />
+              <AlertTitle>API Routes Ready!</AlertTitle>
+              <AlertDescription>
+                This starter now includes pre-built API routes for Supabase and Resend.
+                Visit the <a href='/docs' className='underline font-medium'>Documentation</a> page
+                to see usage examples and setup instructions.
+              </AlertDescription>
+            </Alert>
+
             {/* Help & Resources */}
             <Alert>
               <RocketIcon className='h-4 w-4' />
               <AlertTitle>Ready to Build!</AlertTitle>
               <AlertDescription>
                 You now have everything you need to start building your hackathon project.
-                Explore the <a href='/components' className='underline'>Components</a> and{' '}
-                <a href='/forms' className='underline'>Forms</a> pages to see what&apos;s available.
+                Explore the <a href='/components' className='underline'>Components</a>,{' '}
+                <a href='/forms' className='underline'>Forms</a>, and{' '}
+                <a href='/docs' className='underline'>API Routes</a> pages to see what&apos;s available.
               </AlertDescription>
             </Alert>
           </div>

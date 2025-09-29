@@ -34,6 +34,13 @@ Built for [CTRL+ALT+CREATE Live Seattle](https://ctrlaltcreate.live/) - the crea
 - Hot reload optimized for fast development
 - VS Code settings and recommended extensions
 
+### **API Routes**
+
+- **Health Check** - Verify API availability
+- **Supabase Integration** - Full CRUD operations with database
+- **Email Sending** - Transactional emails via Resend
+- Pre-built templates and examples
+
 ### **Production Ready**
 
 - One-click deployment to Vercel
@@ -74,29 +81,34 @@ Built for [CTRL+ALT+CREATE Live Seattle](https://ctrlaltcreate.live/) - the crea
 ```
 ctrlaltcreate-starter/
 ├── app/                    # Next.js App Router pages
-│   ├── components/         # Component showcase page
-│   ├── docs/              # Documentation page
-│   ├── forms/             # Form examples page
-│   ├── getting-started/   # Setup guide page
-│   ├── settings/          # Settings page
-│   ├── styling/           # Design system page
-│   ├── favicon.ico        # App favicon
-│   ├── globals.css        # Global styles & theme
-│   └── layout.tsx         # Root layout with providers
-├── components/             # Shared React components
-│   ├── layout/            # Layout components (nav, sidebar)
-│   └── ui/                # shadcn/ui components (16+ components)
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions
-│   └── utils.ts           # Helper functions
-├── public/                # Static assets
-├── docs/                  # Documentation files
-├── components.json        # shadcn/ui configuration
-├── eslint.config.mjs      # ESLint configuration
-├── next.config.ts         # Next.js configuration
-├── postcss.config.mjs     # PostCSS configuration
-├── tsconfig.json          # TypeScript configuration
-└── vercel.json            # Vercel deployment configuration
+│   ├── api/               # API routes
+│   │   ├── data/         # Supabase CRUD operations
+│   │   ├── email/        # Email sending with Resend
+│   │   └── health/       # Health check endpoint
+│   ├── components/        # Component showcase page
+│   ├── docs/             # Documentation page
+│   ├── forms/            # Form examples page
+│   ├── getting-started/  # Setup guide page
+│   ├── settings/         # Settings page
+│   ├── styling/          # Design system page
+│   ├── favicon.ico       # App favicon
+│   ├── globals.css       # Global styles & theme
+│   └── layout.tsx        # Root layout with providers
+├── components/            # Shared React components
+│   ├── layout/           # Layout components (nav, sidebar)
+│   └── ui/               # shadcn/ui components (19+ components)
+├── hooks/                # Custom React hooks
+├── lib/                  # Utility functions
+│   ├── supabase.ts       # Supabase client utilities
+│   └── utils.ts          # Helper functions
+├── public/               # Static assets
+├── docs/                 # Documentation files
+├── components.json       # shadcn/ui configuration
+├── eslint.config.mjs     # ESLint configuration
+├── next.config.ts        # Next.js configuration
+├── postcss.config.mjs    # PostCSS configuration
+├── tsconfig.json         # TypeScript configuration
+└── vercel.json           # Vercel deployment configuration
 ```
 
 ## Available Pages
@@ -239,6 +251,87 @@ Use the shadcn/ui CLI to add more components:
 ```bash
 npx shadcn@latest add [component-name]
 ```
+
+## API Routes
+
+This starter includes pre-configured API routes for common hackathon needs. All routes include TypeScript types, validation, and comprehensive error handling.
+
+### Health Check - `/api/health`
+
+Simple endpoint for verifying API availability and debugging.
+
+```bash
+# Check API status
+GET http://localhost:3000/api/health
+```
+
+### Data Operations - `/api/data`
+
+Full CRUD operations with Supabase. Perfect for storing user data, posts, or any database records.
+
+**Setup:**
+1. Create a [Supabase](https://supabase.com) project (free tier available)
+2. Add credentials to `.env.local`:
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   ```
+3. Create tables in Supabase dashboard
+
+**Usage:**
+```bash
+# Fetch all records
+GET /api/data
+
+# Create new record
+POST /api/data
+Body: { "title": "My Post", "content": "Hello", "user_id": "..." }
+
+# Update record
+PUT /api/data
+Body: { "id": "...", "title": "Updated" }
+
+# Delete record
+DELETE /api/data
+Body: { "id": "..." }
+```
+
+### Email Sending - `/api/email/send`
+
+Send transactional emails with pre-built templates. Great for welcome emails, notifications, and alerts.
+
+**Setup:**
+1. Sign up for [Resend](https://resend.com) (free tier: 3,000 emails/month)
+2. Get your API key from dashboard
+3. Add to `.env.local`:
+   ```bash
+   RESEND_API_KEY=re_your_api_key
+   RESEND_FROM_EMAIL=onboarding@resend.dev  # Use resend.dev for testing
+   ```
+
+**Built-in Templates:**
+- `welcome` - Welcome new users
+- `notification` - General notifications
+- `reset-password` - Password reset links
+- `custom` - Your own HTML
+
+**Usage:**
+```bash
+# Send welcome email
+POST /api/email/send
+Body: {
+  "to": "user@example.com",
+  "subject": "Welcome!",
+  "template": "welcome",
+  "data": { "name": "John", "url": "https://yourapp.com" }
+}
+
+# Check configuration
+GET /api/email/send
+```
+
+For more details, see the inline documentation in each route file or visit the `/docs` page in your running app.
 
 ## Deployment
 

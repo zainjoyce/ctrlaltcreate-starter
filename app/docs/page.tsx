@@ -4,6 +4,9 @@ import {
   DatabaseIcon,
   KeyIcon,
   PaletteIcon,
+  ServerIcon,
+  MailIcon,
+  ActivityIcon,
 } from 'lucide-react'
 import {
   Card,
@@ -19,6 +22,81 @@ import { SidebarInset } from '@/components/ui/sidebar'
 import { MainNav } from '@/components/layout/main-nav'
 
 export default function DocsPage() {
+  const apiRoutes = [
+    {
+      icon: ActivityIcon,
+      endpoint: '/api/health',
+      method: 'GET',
+      title: 'Health Check',
+      description: 'Verify API availability and debug deployment',
+      example: `// Test the endpoint
+fetch('/api/health')
+  .then(res => res.json())
+  .then(data => console.log(data))
+
+// Response:
+// {
+//   "status": "ok",
+//   "timestamp": "2024-01-01T00:00:00.000Z",
+//   "environment": "development"
+// }`,
+    },
+    {
+      icon: ServerIcon,
+      endpoint: '/api/data',
+      method: 'GET, POST, PUT, DELETE',
+      title: 'Supabase CRUD',
+      description: 'Full database operations with validation',
+      setup: `# 1. Create Supabase project at supabase.com
+# 2. Add to .env.local:
+NEXT_PUBLIC_SUPABASE_URL=your-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-key`,
+      example: `// Create a post
+const response = await fetch('/api/data', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    title: 'Hello World',
+    content: 'My first post',
+    user_id: 'user-uuid'
+  })
+})
+
+// Fetch all posts with pagination
+const posts = await fetch('/api/data?limit=10&offset=0')
+  .then(res => res.json())`,
+    },
+    {
+      icon: MailIcon,
+      endpoint: '/api/email/send',
+      method: 'POST',
+      title: 'Email Sending',
+      description: 'Transactional emails with pre-built templates',
+      setup: `# 1. Sign up at resend.com
+# 2. Add to .env.local:
+RESEND_API_KEY=re_your_key
+RESEND_FROM_EMAIL=onboarding@resend.dev`,
+      example: `// Send welcome email
+await fetch('/api/email/send', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    to: 'user@example.com',
+    subject: 'Welcome!',
+    template: 'welcome',
+    data: { name: 'John', url: 'https://app.com' }
+  })
+})
+
+// Available templates:
+// - welcome
+// - notification
+// - reset-password
+// - custom (with your own HTML)`,
+    },
+  ]
+
   const apiExamples = [
     {
       title: 'GET /api/users',
@@ -46,15 +124,19 @@ export async function POST(request: Request) {
   const integrationGuides = [
     {
       icon: DatabaseIcon,
-      title: 'Database Setup',
-      description: 'PostgreSQL, MongoDB, or SQLite integration',
-      technologies: ['Prisma', 'Drizzle', 'Mongoose'],
-      code: `// Install Prisma
-npm install prisma @prisma/client
-npx prisma init
+      title: 'Supabase (Included)',
+      description: 'PostgreSQL database with real-time subscriptions',
+      technologies: ['Supabase', 'PostgreSQL', 'Real-time'],
+      code: `// Already installed! See lib/supabase.ts
+import { createServerSupabaseClient } from '@/lib/supabase'
 
-// Database URL in .env
-DATABASE_URL="postgresql://user:pass@localhost:5432/db"`,
+const supabase = createServerSupabaseClient()
+const { data } = await supabase.from('posts').select('*')
+
+// Add to .env.local:
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="your-service-key"`,
     },
     {
       icon: KeyIcon,
@@ -66,6 +148,29 @@ npm install next-auth
 npm install @auth/prisma-adapter
 
 // Configure in app/api/auth/[...nextauth]/route.ts`,
+    },
+    {
+      icon: MailIcon,
+      title: 'Resend Email (Included)',
+      description: 'Transactional email service with templates',
+      technologies: ['Resend', 'Email Templates', 'React Email'],
+      code: `// Already installed! See app/api/email/send/route.ts
+// Three templates ready: welcome, notification, reset-password
+
+// Send an email:
+await fetch('/api/email/send', {
+  method: 'POST',
+  body: JSON.stringify({
+    to: 'user@example.com',
+    subject: 'Welcome!',
+    template: 'welcome',
+    data: { name: 'John' }
+  })
+})
+
+// Add to .env.local:
+RESEND_API_KEY="re_your_key"
+RESEND_FROM_EMAIL="onboarding@resend.dev"`,
     },
     {
       icon: PaletteIcon,
@@ -131,11 +236,75 @@ npm install @heroicons/react lucide-react`,
               </TabsList>
 
               <TabsContent value='api' className='space-y-6'>
+                <div className='bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-6'>
+                  <div className='flex items-start gap-3'>
+                    <ServerIcon className='h-5 w-5 text-blue-500 mt-0.5' />
+                    <div>
+                      <h4 className='font-medium mb-1'>
+                        Pre-built API Routes Ready
+                      </h4>
+                      <p className='text-sm text-muted-foreground'>
+                        This starter includes production-ready API routes for
+                        common hackathon needs. All routes include TypeScript
+                        types, validation, and error handling.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className='grid gap-6'>
+                  {apiRoutes.map((route, index) => (
+                    <Card key={index} className='overflow-hidden'>
+                      <CardHeader>
+                        <div className='flex items-start gap-3'>
+                          <div className='bg-primary text-primary-foreground p-2 rounded-lg flex-shrink-0'>
+                            <route.icon className='h-5 w-5' />
+                          </div>
+                          <div className='flex-1 min-w-0'>
+                            <div className='flex flex-wrap items-center gap-2 mb-1'>
+                              <CardTitle className='text-base sm:text-lg'>{route.title}</CardTitle>
+                              <Badge variant='outline' className='text-xs'>{route.method}</Badge>
+                            </div>
+                            <code className='text-xs sm:text-sm text-muted-foreground break-all'>
+                              {route.endpoint}
+                            </code>
+                            <CardDescription className='mt-2'>
+                              {route.description}
+                            </CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className='space-y-4 overflow-hidden'>
+                        {route.setup && (
+                          <div>
+                            <h5 className='text-sm font-medium mb-2'>Setup</h5>
+                            <div className='bg-muted p-3 rounded overflow-x-auto'>
+                              <pre className='text-sm'>
+                                <code>{route.setup}</code>
+                              </pre>
+                            </div>
+                          </div>
+                        )}
+                        <div>
+                          <h5 className='text-sm font-medium mb-2'>
+                            Usage Example
+                          </h5>
+                          <div className='bg-muted p-3 rounded overflow-x-auto'>
+                            <pre className='text-sm'>
+                              <code>{route.example}</code>
+                            </pre>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+
                 <Card>
                   <CardHeader>
-                    <CardTitle>API Routes</CardTitle>
+                    <CardTitle>Creating Custom Routes</CardTitle>
                     <CardDescription>
-                      Examples of creating API endpoints in Next.js App Router
+                      Examples of creating additional API endpoints
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -175,14 +344,19 @@ npm install @heroicons/react lucide-react`,
                   </CardHeader>
                   <CardContent>
                     <pre className='bg-muted p-4 rounded-lg text-sm overflow-x-auto'>
-                      {`# Database
-DATABASE_URL="postgresql://user:pass@localhost:5432/db"
+                      {`# Supabase (included)
+NEXT_PUBLIC_SUPABASE_URL="https://your-project.supabase.co"
+NEXT_PUBLIC_SUPABASE_ANON_KEY="your-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="your-service-key"
 
-# Authentication
+# Resend Email (included)
+RESEND_API_KEY="re_your_key"
+RESEND_FROM_EMAIL="onboarding@resend.dev"
+
+# Additional integrations
+DATABASE_URL="postgresql://user:pass@localhost:5432/db"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="your-secret-here"
-
-# API Keys
 OPENAI_API_KEY="sk-..."
 STRIPE_SECRET_KEY="sk_test_..."`}
                     </pre>
@@ -193,21 +367,21 @@ STRIPE_SECRET_KEY="sk_test_..."`}
               <TabsContent value='integrations' className='space-y-6'>
                 <div className='grid md:grid-cols-1 gap-6'>
                   {integrationGuides.map((guide, index) => (
-                    <Card key={index}>
+                    <Card key={index} className='overflow-hidden'>
                       <CardHeader>
-                        <div className='flex items-center gap-3'>
-                          <div className='bg-primary text-primary-foreground p-2 rounded-lg'>
+                        <div className='flex items-start gap-3'>
+                          <div className='bg-primary text-primary-foreground p-2 rounded-lg flex-shrink-0'>
                             <guide.icon className='h-5 w-5' />
                           </div>
-                          <div>
-                            <CardTitle>{guide.title}</CardTitle>
+                          <div className='flex-1 min-w-0'>
+                            <CardTitle className='text-base sm:text-lg'>{guide.title}</CardTitle>
                             <CardDescription>
                               {guide.description}
                             </CardDescription>
                           </div>
                         </div>
                       </CardHeader>
-                      <CardContent>
+                      <CardContent className='overflow-hidden'>
                         <div className='space-y-4'>
                           <div className='flex flex-wrap gap-2'>
                             {guide.technologies.map(tech => (
@@ -216,9 +390,11 @@ STRIPE_SECRET_KEY="sk_test_..."`}
                               </Badge>
                             ))}
                           </div>
-                          <pre className='bg-muted p-3 rounded text-sm overflow-x-auto'>
-                            <code>{guide.code}</code>
-                          </pre>
+                          <div className='bg-muted p-3 rounded overflow-x-auto'>
+                            <pre className='text-sm'>
+                              <code>{guide.code}</code>
+                            </pre>
+                          </div>
                         </div>
                       </CardContent>
                     </Card>
@@ -278,6 +454,14 @@ STRIPE_SECRET_KEY="sk_test_..."`}
                         {
                           name: 'Next.js Documentation',
                           url: 'https://nextjs.org/docs',
+                        },
+                        {
+                          name: 'Supabase Docs',
+                          url: 'https://supabase.com/docs',
+                        },
+                        {
+                          name: 'Resend Documentation',
+                          url: 'https://resend.com/docs',
                         },
                         {
                           name: 'shadcn/ui Components',

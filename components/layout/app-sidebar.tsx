@@ -10,6 +10,7 @@ import {
   PaletteIcon,
   RocketIcon,
   BookOpenIcon,
+  ServerIcon,
 } from 'lucide-react'
 
 import {
@@ -25,6 +26,7 @@ import {
   SidebarGroupContent,
 } from '@/components/ui/sidebar'
 import { ThemeToggle } from '@/components/layout/theme-toggle'
+import { Badge } from '@/components/ui/badge'
 
 const data = {
   navigation: [
@@ -54,6 +56,12 @@ const data = {
       title: 'Getting Started',
       url: '/getting-started',
       icon: RocketIcon,
+    },
+    {
+      title: 'API Routes',
+      url: '/docs',
+      icon: ServerIcon,
+      badge: 'New',
     },
     {
       title: 'Documentation',
@@ -118,6 +126,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
+                      {'badge' in item && item.badge && (
+                        <Badge
+                          variant='secondary'
+                          className='ml-auto text-xs px-1.5 py-0.5'
+                        >
+                          {item.badge}
+                        </Badge>
+                      )}
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

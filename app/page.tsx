@@ -1,4 +1,4 @@
-import { RocketIcon, ComponentIcon, PaletteIcon, ZapIcon, ClockIcon, BlocksIcon, ShieldCheckIcon } from 'lucide-react'
+import { RocketIcon, ComponentIcon, PaletteIcon, ZapIcon, ClockIcon, BlocksIcon, ShieldCheckIcon, ServerIcon, DatabaseIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import {
@@ -37,18 +37,32 @@ export default function HomePage() {
       iconColor: 'text-purple-600 dark:text-purple-400'
     },
     {
+      title: 'API Routes',
+      description: 'Pre-built Supabase CRUD and Resend email endpoints ready to use',
+      icon: ServerIcon,
+      color: 'bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20',
+      iconColor: 'text-orange-600 dark:text-orange-400'
+    },
+    {
       title: 'Developer Tools',
       description: 'ESLint, Prettier, TypeScript strict mode, and more',
       icon: ZapIcon,
       color: 'bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20',
       iconColor: 'text-yellow-600 dark:text-yellow-400'
     },
+    {
+      title: 'Database Ready',
+      description: 'Supabase integration with type-safe client utilities included',
+      icon: DatabaseIcon,
+      color: 'bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-900/20 dark:to-teal-900/20',
+      iconColor: 'text-cyan-600 dark:text-cyan-400'
+    },
   ]
 
   const quickStats = [
     { label: 'Setup Time', value: '< 2 min', icon: ClockIcon, color: 'text-blue-500' },
     { label: 'Components', value: '19+', icon: BlocksIcon, color: 'text-green-500' },
-    { label: 'Bundle Size', value: 'Optimized', icon: ZapIcon, color: 'text-yellow-500' },
+    { label: 'API Routes', value: '3', icon: ServerIcon, color: 'text-orange-500' },
     { label: 'TypeScript', value: 'Strict', icon: ShieldCheckIcon, color: 'text-purple-500' },
   ]
 
@@ -102,7 +116,7 @@ export default function HomePage() {
             </div>
 
             {/* Features Grid */}
-            <div className='grid md:grid-cols-2 gap-6 mb-12'>
+            <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12'>
               {features.map((feature, index) => (
                 <Card key={index} className={`${feature.color} border-0`}>
                   <CardHeader>
@@ -131,7 +145,7 @@ export default function HomePage() {
                       1
                     </Badge>
                     <div className='flex-1 min-w-0'>
-                      <div className='font-medium'>Clone & Install</div>
+                      <div className='font-medium'>Clone Repository</div>
                       <div className='bg-muted px-2 py-1 rounded overflow-x-auto'>
                         <code className='text-sm whitespace-nowrap'>
                           git clone https://github.com/zainjoyce/ctrlaltcreate-starter.git
@@ -144,6 +158,17 @@ export default function HomePage() {
                       2
                     </Badge>
                     <div>
+                      <div className='font-medium'>Install Dependencies</div>
+                      <code className='text-sm bg-muted px-2 py-1 rounded'>
+                        cd ctrlaltcreate-starter && npm install
+                      </code>
+                    </div>
+                  </div>
+                  <div className='flex items-start gap-3'>
+                    <Badge variant='outline' className='min-w-6 h-6'>
+                      3
+                    </Badge>
+                    <div>
                       <div className='font-medium'>Start Development</div>
                       <code className='text-sm bg-muted px-2 py-1 rounded'>
                         npm run dev
@@ -152,7 +177,7 @@ export default function HomePage() {
                   </div>
                   <div className='flex items-start gap-3'>
                     <Badge variant='outline' className='min-w-6 h-6'>
-                      3
+                      4
                     </Badge>
                     <div>
                       <div className='font-medium'>Start Building</div>
